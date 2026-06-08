@@ -263,7 +263,8 @@ git commit -m "feat: setup inicial do projeto"
 ```bash
 # python-dotenv: carrega o .env automaticamente
 # agno: framework de agentes (já inclui o SDK da OpenAI internamente)
-uv add python-dotenv agno
+# openai: SDK da OpenAI
+uv add python-dotenv agno openai
 ```
 
 ---
