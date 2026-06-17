@@ -9,7 +9,7 @@ Curso prático de 10 dias para times de segurança aprenderem a construir e inte
 | [Dia 1](./dia-01-setup-e-primeira-integracao.md) | Setup do ambiente + primeira integração com Agno + conceitos de IA | ~1h30 |
 | [Dia 2](./dia-02-chat-roles-temperatura.md) | Modo chat, system/user/assistant, temperatura, thinking, search | ~1h |
 | [Dia 3](./dia-03-prompt-engineering.md) | Prompt Engineering, formato de saída, arquivos (txt, pdf, imagem) | ~1h |
-| [Dia 4](./dia-04-ia-generativa-vs-agentes-agno.md) | IA Generativa vs Agentes + Agno core (tools, memória, sessões) | ~1h |
+| [Dia 4](./dia-04-tools-agno.md) | Tools do Agno (prontas, personalizadas), Threat Intelligence e memória persistente | ~1h |
 | [Dia 5](./dia-05-agno-avancado-agentui.md) | Agno avançado (reasoning, teams, knowledge, workflows) | ~1h |
 | [Dia 6](./dia-06-interfaces-agentui-gradio.md) | Interfaces: AgentOS, AgentUI e Gradio | ~1h |
 | [Dia 7](./dia-07-openrouter.md) | OpenRouter — um endpoint, todos os modelos | ~1h |

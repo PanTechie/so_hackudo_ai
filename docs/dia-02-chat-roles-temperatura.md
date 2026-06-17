@@ -156,15 +156,25 @@ Temperatura 1.5 → pode escolher qualquer um, mesmo os improváveis
 from agno.agent import Agent
 from agno.models.openai import OpenAIChat
 
-# ✅ Análise de malware — temperatura baixa para resposta consistente
+# ✅ Triagem de comandos — temperatura baixa para classificação consistente
 agente_analise = Agent(
     model=OpenAIChat(id="gpt-5.4", temperature=0.1),
-    description="Analista de malware. Classifique hashes e IOCs.",
+    description="""Analista de SOC. Classifique a linha de comando como
+    BENIGNO | SUSPEITO | MALICIOSO e explique em uma frase o motivo.""",
 )
 
-agente_analise.print_response(
-    f"Classifique este hash como malicioso ou benigno: {hash_value}"
+comando = (
+    "powershell -nop -w hidden -enc "
+    "SQBFAFgAKABOAGUAdwAtAE8AYgBqAGUAYwB0ACAATgBlAHQ..."
 )
+
+# Rodamos o MESMO prompt 3 vezes para ver o efeito da temperatura baixa:
+# a classificação se mantém estável a cada execução.
+for i in range(3):
+    print(f"\n--- Execução {i + 1} ---")
+    agente_analise.print_response(
+        f"Classifique esta linha de comando capturada no endpoint:\n{comando}"
+    )
 
 # ✅ Tabletop exercises — temperatura alta para gerar cenários variados
 agente_tabletop = Agent(
@@ -176,6 +186,12 @@ agente_tabletop.print_response(
     "Crie 3 cenários de ataque realistas e diferentes para um tabletop exercise de ransomware."
 )
 ```
+
+> 💡 **Por que rodar 3x no primeiro exemplo?** Com `temperature=0.1`, as três execuções
+> devolvem essencialmente a mesma classificação e justificativa — é isso que queremos em
+> triagem: resultado **reproduzível**. Troque para `temperature=0.9` e rode de novo: as
+> respostas começam a variar no texto. É o mesmo efeito que torna o agente de tabletop
+> (acima) interessante — só que ali a variação é desejável, e aqui é um problema.
 
 ---
 
