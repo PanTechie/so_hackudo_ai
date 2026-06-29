@@ -1,6 +1,6 @@
 # 🛡️ Agentes de IA para Blue Teams
 
-Curso prático de 10 dias para times de segurança aprenderem a construir e integrar agentes de IA no dia a dia do blue team.
+Curso prático de 11 dias para times de segurança aprenderem a construir e integrar agentes de IA no dia a dia do blue team.
 
 ## 📚 Estrutura do Curso
 
@@ -16,6 +16,7 @@ Curso prático de 10 dias para times de segurança aprenderem a construir e inte
 | [Dia 8](./dia-08-mcp-fastmcp-context7.md) | MCP, FastMCP e Context7 | ~1h |
 | [Dia 9](./dia-09-fastapi.md) | Servindo agentes com FastAPI — do zero ao endpoint em produção | ~1h |
 | [Dia 10](./dia-10-skills-superpowers-metodologia.md) | Skills, Superpowers, Graphify, SDD e Harness Engineering | ~1h |
+| [Dia 11](./dia-11-projeto-final-panhacker-ai.md) | Projeto final — PanHacker AI: Agno, MCP, Postgres, Docker e Next.js juntos | ~3-4h |
 
 ## 🛠️ Pré-requisitos
 
@@ -23,7 +24,9 @@ Curso prático de 10 dias para times de segurança aprenderem a construir e inte
 - Conta na [OpenAI Platform](https://platform.openai.com) (API key)
 - Conta no [OpenRouter](https://openrouter.ai) (Dia 7)
 - Conta na [Anthropic Console](https://console.anthropic.com) (Dias 4+)
-- Node.js instalado (Dia 6 — AgentUI)
+- Node.js instalado (Dia 6 — AgentUI, Dia 11 — Next.js)
+- Docker e Docker Compose instalados (Dia 11 — Postgres, MCP sidecars)
+- Contas/API keys de Shodan, Censys, IPinfo, AbuseIPDB e Netlas (Dia 11)
 
 ## ⚡ Quickstart
 

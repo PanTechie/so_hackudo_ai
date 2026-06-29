@@ -1,0 +1,4 @@
+03:14 - SSH root login de 185.220.101.45 (RU)
+03:17 - Download de script malicioso via wget
+03:18 - Execução do script, conexão C2 estabelecida
+03:21 - Acesso a /etc/shadow
