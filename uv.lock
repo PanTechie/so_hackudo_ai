@@ -783,6 +783,7 @@ dependencies = [
     { name = "agno" },
     { name = "ddgs" },
     { name = "duckduckgo-search" },
+    { name = "httpx" },
     { name = "openai" },
     { name = "python-dotenv" },
 ]
@@ -798,6 +799,7 @@ requires-dist = [
     { name = "agno", specifier = ">=2.6.12" },
     { name = "ddgs", specifier = ">=9.14.4" },
     { name = "duckduckgo-search", specifier = ">=8.1.1" },
+    { name = "httpx", specifier = ">=0.28.1" },
     { name = "openai", specifier = ">=2.41.0" },
     { name = "python-dotenv", specifier = ">=1.2.2" },
 ]
