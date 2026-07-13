@@ -1,53 +1,76 @@
-import os
-import json
-import httpx
-from pathlib import Path
 from agno.agent import Agent
 from agno.models.openai import OpenAIChat
-from agno.tools import tool
-
+from agno.team import Team, TeamMode
+from agno.tools.websearch import WebSearchTools
 from dotenv import load_dotenv
 
 load_dotenv()
 
 
-@tool
-def verificar_ip_abuseipdb(ip: str) -> str:
-    """
-    Consulta o AbuseIPDB para verificar se um IP foi reportado como abusivo.
-    Retorna score de abuso, total de reports e país de origem.
-    """
-    api_key = os.getenv("ABUSEIPDB_API_KEY")
-    if not api_key:
-        return "ABUSEIPDB_API_KEY não configurada no .env"
-
-    try:
-        with httpx.Client(timeout=10.0) as client:
-            response = client.get(
-                "https://api.abuseipdb.com/api/v2/check",
-                headers={"Key": api_key, "Accept": "application/json"},
-                params={"ipAddress": ip, "maxAgeInDays": 90},
-            )
-            response.raise_for_status()
-            dados = response.json()["data"]
-
-        return (
-            f"IP: {ip}\n"
-            f"País: {dados.get('countryCode', 'Desconhecido')}\n"
-            f"Score de abuso: {dados['abuseConfidenceScore']}%\n"
-            f"Total de reports: {dados['totalReports']}\n"
-            f"ISP: {dados.get('isp', 'N/A')}\n"
-            f"Último report: {dados.get('lastReportedAt', 'Nunca')}"
-        )
-    except httpx.RequestError as e:
-        return f"Erro de conexão: {e}"
-
-
-agente = Agent(
-    model=OpenAIChat(id="gpt-5.4"),
-    tools=[verificar_ip_abuseipdb],
-    description="Analista de IR com habilidade de verificar informações de IP",
+# ── Agente 1: Especialista em Network ────────────────────────────
+analista_network = Agent(
+    name="Network Analyst",
+    model=OpenAIChat(id="gpt-4o-mini"),
+    description="Especialista em análise de tráfego de rede e IOCs de IP/domínio.",
+    instructions=[
+        "Analise IPs, domínios e padrões de tráfego",
+        "Identifique técnicas MITRE ATT&CK relacionadas à rede",
+        "Foque em: lateral movement, C2, exfiltração",
+    ],
+    tools=[WebSearchTools()],
     markdown=True,
 )
 
-agente.print_response("Verifique o Ip 8.8.8.8")
+# ── Agente 2: Especialista em Endpoint ───────────────────────────
+analista_endpoint = Agent(
+    name="Endpoint Analyst",
+    model=OpenAIChat(id="gpt-4o-mini"),
+    description="Especialista em análise de endpoints, processos e artefatos de malware.",
+    instructions=[
+        "Analise processos, arquivos, registry e persistence mechanisms",
+        "Identifique técnicas MITRE ATT&CK relacionadas ao endpoint",
+        "Foque em: execution, persistence, privilege escalation",
+    ],
+    markdown=True,
+)
+
+# ── Agente 3: Especialista em Threat Intelligence ─────────────────
+analista_ti = Agent(
+    name="Threat Intel Analyst",
+    model=OpenAIChat(id="gpt-4o-mini"),
+    description="Especialista em Threat Intelligence e atribuição de ataques.",
+    instructions=[
+        "Correlacione IOCs com grupos de ameaça conhecidos",
+        "Identifique TTPs e padrões de ataque",
+        "Pesquise em fontes públicas de inteligência",
+    ],
+    tools=[WebSearchTools()],
+    markdown=True,
+)
+
+# ── Líder: Incident Commander ──────────────────────────────────────
+incident_commander = Team(
+    name="SOC Incident Response Team",
+    mode=TeamMode.coordinate,  # Coordena todos em paralelo e consolida
+    model=OpenAIChat(id="gpt-4o"),  # Modelo mais capaz para o líder
+    members=[analista_network, analista_endpoint, analista_ti],
+    description="Time de resposta a incidentes que coordena múltiplos especialistas.",
+    instructions=[
+        "Distribua a investigação entre os especialistas conforme suas áreas",
+        "Consolide as análises em um relatório unificado",
+        "Priorize ações de contenção imediata",
+        "Produza um relatório final estruturado com: Sumário Executivo, "
+        "Timeline, Análise Técnica, Atribuição e Plano de Remediação",
+    ],
+    markdown=True,
+)
+
+# Incidente a ser investigado
+incident_commander.print_response(
+    "Temos um incidente em andamento. "
+    "IP 185.220.101.45 (Tor exit node) fez login SSH como root no prod-01. "
+    "Detectamos execução de script malicioso, criação de backdoor e "
+    "movimentação lateral para o banco de dados. "
+    "Investiguem em paralelo e me deem um relatório completo.",
+    stream=True,
+)
