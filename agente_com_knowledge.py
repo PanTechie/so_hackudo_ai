@@ -1,6 +1,6 @@
 from dotenv import load_dotenv
 from agno.agent import Agent
-from agno.models.openai import OpenAIChat
+from agno.models.nvidia import Nvidia
 from agno.knowledge.knowledge import Knowledge
 from agno.vectordb.lancedb import LanceDb
 from agno.knowledge.embedder.openai import OpenAIEmbedder
@@ -27,7 +27,17 @@ knowledge_base.insert(
 # ── Agente que usa a knowledge base ──────────────────────────────────
 agente = Agent(
     name="SOC Assistant",
-    model=OpenAIChat(id="gpt-4o-mini"),
+    model=Nvidia(
+        id="deepseek-ai/deepseek-v4-flash",
+        temperature=1,
+        top_p=0.95,
+        extra_body={
+            "chat_template_kwargs": {
+                "thinking": True,
+                "reasoning_effort": "high",
+            }
+        },
+    ),
     knowledge=knowledge_base,
     description="""Assistente do SOC com acesso aos playbooks e políticas da empresa.
     Sempre consulte a base de conhecimento antes de responder.""",
